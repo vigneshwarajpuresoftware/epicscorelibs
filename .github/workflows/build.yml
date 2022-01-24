@@ -102,7 +102,7 @@ jobs:
             
           - name: linux 3.6 aarch64
             os: ubuntu-latest
-            pyver: cp36-cp36
+            pyver: cp36-cp36m
             piparch: manylinux2014_aarch64 
             
           - name: linux 3.7 aarch64
