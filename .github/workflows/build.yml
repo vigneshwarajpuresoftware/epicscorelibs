@@ -271,7 +271,6 @@ jobs:
             cd dist
             python3 -m pip install epicscorelibs*.whl
             python3 -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-            python3 -m nose2 -v epicscorelibs
           else
             python -m pip install -U pip
             python -m pip install --only-binary numpy setuptools wheel nose2 numpy
