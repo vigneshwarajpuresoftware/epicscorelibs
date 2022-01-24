@@ -246,9 +246,9 @@ jobs:
           then
             yum install -y python3-devel
             yum install -y python3-pip
-            python -m pip install -U pip
-            python -m pip install --only-binary numpy setuptools wheel nose2 numpy
-            python -m pip install $PRE setuptools-dso
+            python3 -m pip install -U pip
+            python3 -m pip install --only-binary numpy setuptools wheel nose2 numpy
+            python3 -m pip install $PRE setuptools-dso
           else
             python -m pip install -U pip
             python -m pip install --only-binary numpy setuptools wheel nose2 numpy
