@@ -104,8 +104,21 @@ jobs:
             os: ubuntu-latest
             pyver: cp36-cp36
             piparch: manylinux2014_aarch64 
-            pre: linux32
             
+          - name: linux 3.7 aarch64
+            os: ubuntu-latest
+            pyver: cp37-cp37
+            piparch: manylinux2014_aarch64 
+          
+          - name: linux 3.8 aarch64
+            os: ubuntu-latest
+            pyver: cp38-cp38
+            piparch: manylinux2014_aarch64 
+          
+          - name: linux 3.9 aarch64
+            os: ubuntu-latest
+            pyver: cp39-cp39
+            piparch: manylinux2014_aarch64 
 
           # numpy builds for >=3.10 do no include i686
 
@@ -262,9 +275,9 @@ jobs:
            dist/*.tar.*
 
           cd dist
-          python -m pip install epicscorelibs*.whl
-          python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-          python -m nose2 -v epicscorelibs
+          python3 -m pip install epicscorelibs*.whl
+          python3 -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
+          python3 -m nose2 -v epicscorelibs
 
           EOF
           cat runit.sh
