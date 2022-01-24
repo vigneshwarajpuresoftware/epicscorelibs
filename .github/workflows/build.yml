@@ -107,7 +107,7 @@ jobs:
             
           - name: linux 3.7 aarch64
             os: ubuntu-latest
-            pyver: cp37-cp37
+            pyver: cp37-cp37m
             piparch: manylinux2014_aarch64 
           
           - name: linux 3.8 aarch64
