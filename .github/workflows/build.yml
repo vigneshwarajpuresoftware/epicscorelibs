@@ -242,7 +242,7 @@ jobs:
           ls dist/*
           export PATH="/opt/python/${{ matrix.pyver }}/bin:\$PATH"
           which python
-          if matrix.piparch == manylinux2014_aarch64 
+          if "$matrix.piparch" == manylinux2014_aarch64 
           then
             yum install -y python3-devel
             yum install -y python3-pip
