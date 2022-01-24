@@ -104,7 +104,7 @@ jobs:
             os: ubuntu-latest
             pyver: cp36-cp36
             piparch: manylinux2014_aarch64 
-            pre: linux32
+            
 
           # numpy builds for >=3.10 do no include i686
 
