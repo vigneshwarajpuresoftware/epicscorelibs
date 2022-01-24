@@ -196,6 +196,7 @@ jobs:
           submodules: recursive
       
       - name: Set up QEMU
+        if: manylinux2014_aarch64
         id: qemu
         uses: docker/setup-qemu-action@v1
 
