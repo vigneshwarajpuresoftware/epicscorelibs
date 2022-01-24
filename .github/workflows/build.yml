@@ -256,35 +256,18 @@ jobs:
           ls dist/*
           export PATH="/opt/python/${{ matrix.pyver }}/bin:\$PATH"
           which python
-          if [ "${{matrix.piparch}}" == manylinux2014_aarch64 ]
-          then
-            yum install -y python3-devel
-            yum install -y python3-pip
-            python3 -m pip install -U pip
-            python3 -m pip install --only-binary numpy setuptools wheel nose2 numpy
-            python3 -m pip install $PRE setuptools-dso
-            python3 -m pip wheel -v -w dist --no-index --no-deps \
+          python -m pip install -U pip
+          python -m pip install --only-binary numpy setuptools wheel nose2 numpy
+          python -m pip install $PRE setuptools-dso
+          python -m pip wheel -v -w dist --no-index --no-deps \
            --no-build-isolation --no-use-pep517 \
            --build-option --plat-name=${{ matrix.piparch }} \
            $PRE \
-           dist/*.tar.*
-            cd dist
-            python3 -m pip install epicscorelibs*.whl
-            python3 -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-          else
-            python -m pip install -U pip
-            python -m pip install --only-binary numpy setuptools wheel nose2 numpy
-            python -m pip install $PRE setuptools-dso
-            python -m pip wheel -v -w dist --no-index --no-deps \
-           --no-build-isolation --no-use-pep517 \
-           --build-option --plat-name=${{ matrix.piparch }} \
-           $PRE \
-           dist/*.tar.*
-           cd dist
-           python -m pip install epicscorelibs*.whl
-           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-           python -m nose2 -v epicscorelibs
-          fi
+          dist/*.tar.*
+          cd dist
+          python -m pip install epicscorelibs*.whl
+          python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
+          python -m nose2 -v epicscorelibs
           EOF
           cat runit.sh
           chmod +x runit.sh
