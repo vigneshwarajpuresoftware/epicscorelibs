@@ -268,13 +268,17 @@ jobs:
           cd dist
           python -m pip install epicscorelibs*.whl
           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
+          if [ ${{matrix.piparch}} != manylinux2014_aarch64 ]
+          then 
           python -m nose2 -v epicscorelibs
+          else
           EOF
           cat runit.sh
           chmod +x runit.sh
           docker pull quay.io/pypa/${{ matrix.piparch }}
           docker run --rm -v `pwd`:/io quay.io/pypa/${{ matrix.piparch }} ${{ matrix.pre }} /io/runit.sh
-
+          fi
+          
       - name: List Artifacts
         run: ls dist/*
 
