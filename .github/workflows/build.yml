@@ -196,7 +196,7 @@ jobs:
           submodules: recursive
       
       - name: Set up QEMU
-        if: ${{matrix.piparch}} == manylinux2014_aarch64 && ${{matrix.piparch}} != win_amd64 && ${{matrix.piparch}} != macosx_10_10_intel
+        if: ${{ matrix.arch == 'aarch64' }}
         id: qemu
         uses: docker/setup-qemu-action@v1
 
