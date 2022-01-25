@@ -196,7 +196,7 @@ jobs:
           submodules: recursive
       
       - name: Set up QEMU
-        if: ${{matrix.piparch}} == manylinux2014_aarch64
+        if: ${{matrix.piparch}} == manylinux2014_aarch64 && ${{matrix.piparch}} != win_amd64 && ${{matrix.piparch}} != macosx_10_10_intel
         id: qemu
         uses: docker/setup-qemu-action@v1
 
@@ -260,27 +260,15 @@ jobs:
           python -m pip install -U pip
           python -m pip install --only-binary numpy setuptools wheel nose2 numpy
           python -m pip install $PRE setuptools-dso
-          if [ "${{matrix.piparch}}" == manylinux2014_aarch64 ]
-          then
-            python -m pip wheel -v -w dist --no-index --no-deps \
+          python -m pip wheel -v -w dist --no-index --no-deps \
            --no-build-isolation --no-use-pep517 \
            --build-option --plat-name=${{ matrix.piparch }} \
            $PRE \
-            dist/*.tar.*
-            cd dist
-            python -m pip install epicscorelibs*.whl
-            python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-          else
-            python -m pip wheel -v -w dist --no-index --no-deps \
-           --no-build-isolation --no-use-pep517 \
-           --build-option --plat-name=${{ matrix.piparch }} \
-           $PRE \
-            dist/*.tar.*
-            cd dist
-            python -m pip install epicscorelibs*.whl
-            python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-            python -m nose2 -v epicscorelibs
-          fi
+           dist/*.tar.*
+           cd dist
+          python -m pip install epicscorelibs*.whl
+          python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
+          python -m nose2 
           EOF
           cat runit.sh
           chmod +x runit.sh
