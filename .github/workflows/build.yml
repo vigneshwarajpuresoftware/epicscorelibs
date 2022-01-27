@@ -268,7 +268,13 @@ jobs:
           cd dist
           python -m pip install epicscorelibs*.whl
           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
+          if [ $matrix.piparch == 'manylinux2014_aarch64' ]
+          then
+          yum install python-nose2
           python -m nose2 -v epicscorelibs
+          else
+          python -m nose2 -v epicscorelibs
+          fi
           EOF
           cat runit.sh
           chmod +x runit.sh
