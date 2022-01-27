@@ -169,32 +169,37 @@ jobs:
             os: windows-latest
             python: "3.10"
             piparch: win_amd64
-            
+        
           - name: linux 3.6 aarch64
             os: ubuntu-latest
             pyver: cp36-cp36m
-            piparch: manylinux2014_aarch64 
-            
+            piparch: manylinux2014_aarch64
+            pre: linux32
+
           - name: linux 3.7 aarch64
             os: ubuntu-latest
             pyver: cp37-cp37m
-            piparch: manylinux2014_aarch64 
-          
+            piparch: manylinux2014_aarch64
+            pre: linux32
+
           - name: linux 3.8 aarch64
             os: ubuntu-latest
             pyver: cp38-cp38
-            piparch: manylinux2014_aarch64 
-          
+            piparch: manylinux2014_aarch64
+            pre: linux32
+
           - name: linux 3.9 aarch64
             os: ubuntu-latest
             pyver: cp39-cp39
-            piparch: manylinux2014_aarch64 
+            piparch: manylinux2014_aarch64
+            pre: linux32
+
 
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: recursive
-      
+
       - name: Set up QEMU
         if: ${{ matrix.piparch == 'manylinux2014_aarch64' }}
         id: qemu
@@ -215,7 +220,6 @@ jobs:
           python -m pip --version
           python -m twine -h
           python ./gha-set-pre.py
-
       - name: PY Source
         run: |
           echo "PRE=$PRE"
@@ -223,12 +227,10 @@ jobs:
           python -m pip install $PRE setuptools-dso
           python setup.py sdist --formats=gztar
           ls dist/*
-
       - name: PEP517 Build
         if: matrix.source
         run: |
           python -m pip wheel -v -w dist $PRE dist/*.tar.*
-
       - name: Native PY build
         if: matrix.python && !matrix.source
         shell: bash
@@ -238,12 +240,10 @@ jobs:
            --build-option --plat-name=${{ matrix.piparch }} \
            $PRE \
            dist/*.tar.*
-
           cd dist
           python -m pip install epicscorelibs*.whl
           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
           python -m nose2 -v epicscorelibs
-
       - name: Docker PY build
         if: matrix.pyver && !matrix.source
         run: |
@@ -264,18 +264,16 @@ jobs:
            --no-build-isolation --no-use-pep517 \
            --build-option --plat-name=${{ matrix.piparch }} \
            $PRE \
-
+           dist/*.tar.*
           cd dist
           python -m pip install epicscorelibs*.whl
           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
           python -m nose2 -v epicscorelibs
-          
           EOF
           cat runit.sh
           chmod +x runit.sh
           docker pull quay.io/pypa/${{ matrix.piparch }}
           docker run --rm -v `pwd`:/io quay.io/pypa/${{ matrix.piparch }} ${{ matrix.pre }} /io/runit.sh
-          
       - name: List Artifacts
         run: ls dist/*
 
@@ -292,7 +290,6 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           python -m twine upload --skip-existing dist/epicscorelibs*.whl
-
       - name: Upload source
         if: github.event_name=='push' && github.ref=='refs/heads/master' && matrix.source
         env:
