@@ -264,16 +264,11 @@ jobs:
            --no-build-isolation --no-use-pep517 \
            --build-option --plat-name=${{ matrix.piparch }} \
            $PRE \
-           dist/*.tar.*
-           cd dist
+
+          cd dist
           python -m pip install epicscorelibs*.whl
           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
           python -m nose2 -v epicscorelibs
-          EOF
-          cat runit.sh
-          chmod +x runit.sh
-          docker pull quay.io/pypa/${{ matrix.piparch }}
-          docker run --rm -v `pwd`:/io quay.io/pypa/${{ matrix.piparch }} ${{ matrix.pre }} /io/runit.sh
           
       - name: List Artifacts
         run: ls dist/*
