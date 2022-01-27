@@ -268,7 +268,7 @@ jobs:
            cd dist
           python -m pip install epicscorelibs*.whl
           python -c 'import epicscorelibs; print("IMPORT", epicscorelibs.__file__)'
-          python -m nose2 
+          python -m nose2 -v epicscorelibs
           EOF
           cat runit.sh
           chmod +x runit.sh
